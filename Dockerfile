@@ -15,6 +15,15 @@ RUN rm -rf /usr/local/tomcat/webapps/*
 ADD https://github.com/Astrocapt/Geoserver/releases/download/v2.28.1/geoserver.war \
     /usr/local/tomcat/webapps/geoserver.war
 
+    ADD https://github.com/Astrocapt/hello-test/raw/main/data_dir.zip /tmp/data_dir.zip
+RUN apt-get update && apt-get install -y unzip \
+    && unzip /tmp/data_dir.zip -d /usr/local/tomcat/data_dir/ \
+    && rm /tmp/data_dir.zip \
+    && apt-get remove -y unzip \
+    && apt-get clean
+ENV GEOSERVER_DATA_DIR=/usr/local/tomcat/data_dir
+
+
 # Download Sample_Area workspace zip directly from your repo
 ADD https://github.com/Astrocapt/hello-test/raw/main/Sample_Area.zip \
     /tmp/${WORKSPACE_ZIP}
